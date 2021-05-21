@@ -1,5 +1,106 @@
 {% extends "auctions/layout.html" %}
-
+{% block title%}
+Listing: {{list.title}} 
+{% endblock %}
 {% block body %}
+<h3><b>Listing: {{list.title}}</b></h3>
+{% if list.is_watched %}
+<a href="#" class="badge badge-secondary">
+    Watchlist
+</a>
+{% endif %}
+<div class="containder">
+     <div class="row">
+        <div class="card border-light col col-lg-6 col-md-8 col-sm-12 ">
+            {% for item in listing_picture %}
+                <img src="{{item.picture.url}}" alt="{{item.alt_text}}" class="img-fluid">
+            {% empty %}
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="Not Found Images" class="img-fluid" style="width: min-content; margin-left: 100px;">
+            {% endfor %}
+        </div>
     
+        <div class="card border-primary col col-12 col-lg-4 col-md-4 col-sm-12">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <li>{{list.title}}</li>
+                    {% if list.creator == request.user and list.flActive %}
+                        <a href="{% url 'close_list' list.id %}" class="btn btn-outline-info" role="button">Close </a>
+                    {% endif %}
+                </h5>
+                <a href="{% url 'change_watchlist' list.id 'listing' %}" class="badge badge-primary">
+                    {% if list.is_watched %}
+                    Remove from Watchlist
+                    {% else %}
+                    Add to My Watchlist
+                    {% endif %}
+                </a>
+                <p class="card-text"><b>Product Descriptions: </b>{{list.description}}</p>
+                <p class="card-text"><b>Starting Price: {{list.startingBid}}</b></p>
+                <p class="card-text">
+                    {% if list.currentBid is None %}
+                        {% if list.creator != user %}
+                            <p>  Make the first bid of this listing ! </p> 
+                        {% else %}
+                        {% endif %}
+                    {% elif list.buyer is not None %}
+                        {% if list.creator == user %}
+                        You've sold this item to {{list.buyer}} for {{list.currentBid}}
+                        {% elif list.buyer  == user %}
+                        you won this auction !!!
+                        {% else %}
+                        This item is selling in Price: {{list.currentBid}}
+                        {% endif %}    
+                    {% else %}
+                        Current Price: {{list.currentBid}}
+                    {% endif %}
+
+                        {% if error_min_value %}
+                        <p class="card-text">
+                            <div class="alert alert-warning" role="alert">Your bid must be bigger than {{ list.currentBid|default:list.startingBid }}</div>
+                        </p>
+                        {% endif %}
+                        {% if list.flActive and list.creator != user %}
+                            <div class="form-group">
+                                <form action="{% url 'take_bid' list.id %}" method="POST">
+                                    {% csrf_token %}
+                                    {{form}}
+                                    <input type="submit" value="Bit on it!">
+                                </form>
+                            </div>
+                        {% endif %} 
+        
+                    <h6><b>Detail: </b></h6>
+                    <li>Listed by: {{ list.creator }}</li>
+                    <li>Category: 
+                        {{list.category|default:"No Category Listed"}}
+                    </li>
+                    <p class="card-text" ><small class="text-muted"> Create on : {{ list.create_date|date:"M, d" }} </small></p>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card border-light col col-lg-6 col-md-8 col-sm-12">
+        <form action="{% url 'comment' list.id %}" method="post">
+            {% csrf_token %}
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">{{user}}</span>
+                </div>
+            {{comment_form.comment}}  
+            <div class="input-group-prepend">
+                <button type="submit" class="input-group-text">Send</button>
+            </div>
+            </div> 
+        </form>
+        <div>
+            {% for com in comment %}
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{com.comment}} - <a href="" >{{com.user}}</a>-
+                <small class="text-muted"> Posted on : {{ com.createDate|date:"M, d" }} </small>
+                </li>
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,8 +1,29 @@
 {% extends "auctions/layout.html" %}
+{%block title%}{{page_title}}{%endblock%}
 {% block body %}
-    <h2>Active Listings</h2>
+<h2>{{page_title}}</h2>
 <div class="container">
-    <div class="row">
-        
+    <div class="row">        
+        {% for list in list %}
+        <div class="card border-light col col-lg-4 col-md-6 col-sm-6 col-12">
+            <a href="{% url 'listing' list.id %}" class="card-link">
+                <img src="{{list.mainPicture.picture.url|default:"https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"}}" class="img-fluid" style="max-height:250px;width:100%" alt="{{list.mainPicture.alt_text|default:'No Image Found.'}}">
+            </a>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item-action"><h4>{{list.title}}</h4></li>
+                    <li class="list-group-item"><b>Price: </b>$
+                        {% if list.currentBid %}
+                        {{list.currentBid}}
+                        {% else %}
+                        {{list.startingBid}}
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item card-text"><p>{{list.description}}</p></li>
+                    <small class="text-muted">Created Date:  {{list.create_date}}.</small>
+                </ul>
+            </div>    
+        </div>
+        {% endfor %}
     </div>
 {% endblock %}

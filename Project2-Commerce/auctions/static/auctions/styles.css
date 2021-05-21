@@ -1,4 +1,4 @@
-body {
+/* body {
     padding: 10px;
 }
 .products {
@@ -19,15 +19,16 @@ body {
 
 .product-image img {
 	width: 100%;
+	align-items: center;
 }
 
 .product-info {
 	margin-top: auto;
 	padding-top: 20px;
 	text-align: center;
-}
+} */
 
-@media ( max-width: 920px ) {
+/* @media ( max-width: 920px ) {
 	
 	.product-card {
 		flex: 1 21%;
@@ -62,4 +63,4 @@ body {
 		align-self: flex-start;
 	}
 	
-}
+} */

@@ -1,48 +1,29 @@
 {% extends "auctions/layout.html" %}
 
-{% block body %}
-
-    <h2>Create Listing</h2>
-
-    <!-- {% if success %}
-        <div>{{ success }}</div>
-    {% endif %} -->
-<!-- 
-    <form action="{% url 'newlist' %}" method="post">
-        {% csrf_token %}
-        {{form}} -->
-
-        <!-- <div class="form-group">
-            <input class="form-control" autofocus type="text" name="product" placeholder="Product Title">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="number" name="bid" placeholder="Start Bid">
-        </div>
-        <div class="form-group">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">Upload</span>
+{% block body %}    
+    <h2>New Listing</h2>
+    <div class="containder">
+            {% if success %}
+            <div class="alert alert-success" role="alert">SUCCESSFULLY CREATED</div>
+            {% elif false %}
+            <div class="alert alert-warning" role="alert">Not Successful</div>    
+            {% endif %}
+        <div class="row">
+            <div class="card border-light col col-lg-6 col-md-8 col-sm-12">
+                <div class="form-group">
+                    <div class="mb-3">
+                <form action="{% url 'newlist' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    {{ imageForm.management_form }}
+                    {% for form in imageForm %}
+                    {{ form.as_p }}
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary"> Upload </button>
+                    </div>
+                </form>
                 </div>
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="inputGroupFile01">
-                  <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                </div>
-              </div>
-        </div>
-        <div class="form-group">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">Categories</label>
-                </div>
-                <select class="custom-select" id="inputGroupSelect01">
-                  <option selected>Choose...</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-        </div>
-        <input class="btn btn-primary" type="submit" value="Register"> -->
-    </form>
-
+            </div>
+        </div>  
+    </div>
 {% endblock %}

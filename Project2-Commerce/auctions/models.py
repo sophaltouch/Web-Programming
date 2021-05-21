@@ -18,10 +18,10 @@ class Listing(models.Model):
     description = models.CharField(null=True, max_length=300)
     startingBid = models.FloatField()
     currentBid = models.FloatField(blank=True,null=True)
-    category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name="similar_listing")
+    category = models.ForeignKey(Category,null=True,blank=True,on_delete=models.CASCADE,related_name="similar_listing")
     creator = models.ForeignKey(User,on_delete=models.PROTECT,related_name="all_creator_listings")
     watchers = models.ManyToManyField(User,blank=True,related_name="watched_listings")
-    buyer = models.ForeignKey(User,null=True,on_delete=models.PROTECT)
+    buyer = models.ForeignKey(User,blank=True,null=True,on_delete=models.PROTECT)
 
     def __str__(self):
         return f"{self.title} - {self.startingBid}"
@@ -41,5 +41,5 @@ class Comment(models.Model):
 
 class Picture(models.Model):
     listing = models.ForeignKey(Listing,on_delete=models.CASCADE,related_name="get_pictures")
-    picture = models.ImageField(upload_to="images/")
+    picture = models.ImageField(upload_to="static/images/")
     alt_text = models.CharField(max_length=140)
